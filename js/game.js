@@ -53,7 +53,25 @@ function isFaceDown(player,index){
 }
 
 function canUseFieldCard(player,index){
-  return !!fieldCard(player,index) && !isFaceDown(player,index);
+  const entry=fieldEntry(player,index);
+  return !!entry?.card && entry.faceDown !== true;
+}
+
+// Toda ação de campo passa por esta trava. Uma carta escondida existe no estado,
+// mas nunca pode ser usada enquanto faceDown === true.
+function requireFaceUp(player,index){
+  const entry=fieldEntry(player,index);
+  if(!entry?.card) return false;
+  if(entry.faceDown === true){
+    if(player===0 && player===state.activePlayer){
+      pendingReveal={player,index};
+      openRevealModal();
+    }else{
+      log("Essa carta está face para baixo e não pode ser usada.");
+    }
+    return false;
+  }
+  return true;
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
@@ -288,13 +306,12 @@ function selectFieldCard(player,index){
   const card=entry?.card;
   if(!entry || !card) return;
 
-  if(player===0 && player===state.activePlayer && entry.faceDown){
-    pendingReveal={player,index};
-    openRevealModal();
-    return;
-  }
-
   if(entry.faceDown){
+    if(player===0 && player===state.activePlayer){
+      pendingReveal={player,index};
+      openRevealModal();
+      return;
+    }
     log(player===0
       ? "Essa carta está face para baixo. Vire-a para cima antes de usá-la."
       : "Essa carta está face para baixo.");
@@ -391,9 +408,13 @@ function resolveBattle(attackerPlayer,attackerIndex,targetPlayer,targetIndex,onD
     return;
   }
 
+  // Uma carta face para baixo não pode participar da batalha como alvo ativo.
+  // Primeiro ela precisa ser virada para cima pelo painel lateral.
   if(targetEntry.faceDown){
-    targetEntry.faceDown=false;
-    log(`${target.name} foi revelada durante a batalha.`);
+    state.selectedAttacker=null;
+    log(`${target.name} está face para baixo. Vire a carta para cima antes de usá-la.`);
+    render();
+    return;
   }
 
   state.selectedAttacker=null;
