@@ -382,7 +382,9 @@ function resolveBattle(attackerPlayer,attackerIndex,targetPlayer,targetIndex,onD
   const target=targetEntry?.card;
   if(!attacker || !target) return;
 
-  if(attackerEntry.faceDown){
+  // Regra absoluta: carta face para baixo não pode ser usada em batalha.
+  // Ela só volta a ser utilizável depois de revealSelectedCard().
+  if(!canUseFieldCard(attackerPlayer,attackerIndex)){
     state.selectedAttacker=null;
     log("Uma carta face para baixo não pode atacar. Vire-a para cima primeiro.");
     render();
