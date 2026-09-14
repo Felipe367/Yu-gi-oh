@@ -1905,3 +1905,117 @@ header{height:70px;display:flex;align-items:center;gap:20px;padding:10px 18px;ba
   .divider{height:3px;left:2%;right:2%}
   .divider::before,.divider::after{display:none}
 }
+
+/* =========================================================
+   ARENA 3D — acabamento final inspirado na referência
+   Mantém a estrutura/posições do jogo e trabalha apenas o visual.
+   ========================================================= */
+.duel-screen{
+  background:
+    radial-gradient(circle at 50% 44%, rgba(24,120,255,.34), transparent 31%),
+    radial-gradient(circle at 8% 35%, rgba(0,238,255,.22), transparent 22%),
+    radial-gradient(circle at 92% 52%, rgba(0,116,255,.24), transparent 24%),
+    linear-gradient(180deg,#01030b 0%,#021238 24%,#062b72 50%,#041d54 76%,#01050f 100%);
+}
+.duel-screen .arena{
+  background:
+    radial-gradient(ellipse at 50% 48%,rgba(26,154,255,.38),transparent 46%),
+    linear-gradient(180deg,#031743 0%,#06357d 48%,#052a68 100%);
+  box-shadow:inset 0 0 120px rgba(0,0,0,.78), inset 0 0 55px rgba(0,205,255,.18), 0 0 35px rgba(0,100,255,.22);
+}
+.duel-screen .arena::before{
+  opacity:.9;
+  background-image:
+    linear-gradient(30deg,transparent 46%,rgba(74,237,255,.20) 47%,rgba(74,237,255,.20) 49%,transparent 50%),
+    linear-gradient(150deg,transparent 46%,rgba(74,237,255,.20) 47%,rgba(74,237,255,.20) 49%,transparent 50%),
+    linear-gradient(90deg,rgba(40,150,255,.10) 1px,transparent 1px),
+    linear-gradient(rgba(40,150,255,.10) 1px,transparent 1px);
+  background-size:58px 100px,58px 100px,29px 29px,29px 29px;
+  filter:drop-shadow(0 0 8px rgba(0,200,255,.16));
+}
+.duel-screen .arena::after{
+  inset:1.5% 3.5% 2.5%;
+  border:3px solid rgba(54,239,255,.72);
+  border-radius:42px;
+  box-shadow:0 0 12px #36efff,0 0 35px rgba(0,143,255,.60),0 0 80px rgba(0,143,255,.30),inset 0 0 35px rgba(54,239,255,.18);
+}
+/* moldura interna dupla */
+.duel-screen .arena .player-side:first-of-type::before,
+.duel-screen .arena .player-side.player::before{
+  content:"";
+  position:absolute;
+  left:5%; right:5%; top:4%; bottom:4%;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:28px;
+  box-shadow:inset 0 0 24px rgba(0,215,255,.08);
+  pointer-events:none;
+  z-index:-1;
+}
+/* zonas grandes, proporcionais às cartas */
+.zones{
+  width:min(900px,calc(100vw - 120px));
+  height:clamp(190px,27vh,255px);
+  gap:10px;
+  padding:10px;
+  border:2px solid #2eeeff;
+  background:linear-gradient(145deg,rgba(11,91,190,.50),rgba(2,11,37,.90));
+  box-shadow:0 0 0 2px rgba(0,105,255,.35),0 0 20px rgba(0,220,255,.50),0 0 55px rgba(0,108,255,.28),inset 0 0 35px rgba(0,220,255,.16),0 17px 32px rgba(0,0,0,.55);
+  transform:perspective(1200px) rotateX(4deg) translateZ(10px);
+}
+.zone{
+  border:2px solid #ff3155;
+  background:linear-gradient(145deg,rgba(20,105,205,.50),rgba(2,13,39,.88));
+  box-shadow:0 0 9px rgba(255,49,85,.72),0 0 20px rgba(255,49,85,.25),inset 0 0 22px rgba(0,214,255,.24),inset 0 -14px 20px rgba(0,0,0,.35),0 5px 0 #010818;
+}
+.zone::before{
+  border-color:rgba(86,242,255,.34);
+  box-shadow:inset 0 0 17px rgba(0,210,255,.20),0 0 8px rgba(0,210,255,.10);
+}
+.zone.empty-zone span{color:rgba(162,239,255,.54)}
+.card-zone{padding:3px}
+.field-card{filter:drop-shadow(0 10px 9px rgba(0,0,0,.72));}
+.field-card:hover{transform:translateZ(28px) translateY(-5px) scale(1.035)}
+.field-card.face-down .card-back-image{
+  width:100%;height:100%;object-fit:cover;display:block;
+  border-radius:6px;
+  box-shadow:inset 0 0 15px rgba(0,0,0,.55),0 0 10px rgba(255,104,55,.22);
+}
+.face-down-badge{
+  position:absolute;left:3px;right:3px;bottom:3px;
+  padding:3px 2px;background:rgba(3,9,22,.82);border:1px solid #ff3155;
+  color:#ffd7dd;font-size:6px;font-weight:900;text-shadow:0 0 5px #ff3155;
+}
+/* decks com várias cartas deslocadas em profundidade */
+.deck-pile{
+  width:72px;height:104px;flex-basis:72px;
+  transform:perspective(850px) rotateX(8deg) rotateY(-8deg) rotateZ(-2deg) translateZ(18px);
+  border:2px solid #39efff;
+  box-shadow:2px 2px 0 #4a3420,5px 5px 0 #2d2420,8px 8px 0 #1d1a22,11px 12px 0 #11121b,15px 17px 0 #080a12,20px 27px 25px rgba(0,0,0,.86),0 0 19px rgba(54,239,255,.65),inset 0 0 14px rgba(255,255,255,.18);
+}
+.deck-pile::before{transform:translate(6px,6px) rotate(1deg);}
+.deck-pile::after{transform:translate(11px,12px) rotate(2deg);}
+.deck-pile span{background:rgba(0,9,23,.84);color:#b9fbff}
+/* iluminação das cartas */
+.duel-card{box-shadow:0 8px 18px rgba(0,0,0,.70),0 0 8px rgba(54,239,255,.12)}
+.full-hand-card .duel-card{box-shadow:0 12px 18px rgba(0,0,0,.80),0 0 12px rgba(54,239,255,.25)}
+/* divisor central como laser */
+.divider{height:7px;background:linear-gradient(90deg,transparent 0%,#18d9ff 8%,#dfffff 50%,#18d9ff 92%,transparent 100%);box-shadow:0 0 10px #00eaff,0 0 28px #00bfff,0 0 65px rgba(0,147,255,.78)}
+.divider span{background:linear-gradient(180deg,#12538c,#03152d);border-color:#46efff}
+/* HUD com placas metálicas/holográficas */
+.duel-screen .topbar{background:linear-gradient(180deg,rgba(3,42,82,.98),rgba(1,8,19,.98));border-bottom:2px solid #35efff;box-shadow:0 0 24px rgba(0,220,255,.42),0 8px 28px rgba(0,0,0,.76)}
+.field-actions button{border-color:#39efff;background:linear-gradient(180deg,#11578c,#03162e);box-shadow:0 0 10px rgba(54,239,255,.28),0 4px 8px #000}
+/* painel lateral no mesmo acabamento */
+.card-inspector{background:linear-gradient(180deg,rgba(4,36,72,.98),rgba(1,8,20,.99));border-color:#3befff;box-shadow:5px 0 30px #000e,0 0 28px rgba(0,211,255,.38),inset 0 0 0 1px #2384aa}
+.inspector-header{background:linear-gradient(180deg,#0b5b92,#04162c);border-bottom-color:#ff3155}
+.inspector-btn.face-down{border-color:#ff3155;box-shadow:0 0 12px rgba(255,49,85,.20)}
+/* responsivo */
+@media(max-width:900px){
+  .zones{width:calc(100vw - 115px);height:clamp(165px,25vh,215px);gap:6px;padding:6px}
+  .deck-pile{width:58px;height:84px;flex-basis:58px}
+}
+@media(max-width:700px){
+  .zones{width:calc(100vw - 72px);height:125px;gap:3px;padding:3px}
+  .deck-pile{width:46px;height:67px;flex-basis:46px}
+  .duel-screen .arena::after{inset:1% 2% 3%}
+}
+
